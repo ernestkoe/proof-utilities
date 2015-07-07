@@ -1,0 +1,40 @@
+24U Sample Code - Terms of use
+-------------------------------
+
+Important: The latest version of 24U FM Template is available for
+download from:
+
+http://24uSoftware.com/FMTemplate  or  http://www.NewMillennium.com/
+
+-------------------------------
+
+
+24U FM Template (with the exception of the contents of the "FMPlugInSDK"
+folder), is provided as royalty free "24U Sample Code" under the
+following conditions:
+
+You may incorporate this sample code into your products without
+restriction, though the code has been provided "AS IS" and the
+responsibility for its operation is 100% yours.
+
+You are not however permitted to redistribute the source as "24U Sample
+Code" or "New Millennium Sample Code" after having made changes.
+
+If you are going to redistribute the source with references to 24U
+Software or New Millennium Communications, we require that you make it
+clear in the source that the code was descended from 24U Sample Code,
+but that you've made changes.
+
+The contents of the "FMPlugInSDK" folder are proprietary to FileMaker,
+Inc., and are not redistributable in source code form. See the copyright
+included with those files for more information.
+
+
+
+Getting technical support
+--------------------------
+
+Neither 24U Software nor New Millennium Communications warrants to
+provide technical support for this product. However, we appreciate any
+feedback you send to us through our on-line technical support form, and
+we will try to answer your questions.

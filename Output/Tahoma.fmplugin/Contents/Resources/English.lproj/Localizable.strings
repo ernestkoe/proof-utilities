@@ -1,0 +1,14 @@
+/* Plug-In name appearing in FM's preferences dialog */
+String1 = "Tahoma";
+/* Options text appearing in FM's preferences dialog */
+String2 = "This plug-in adds a number of utility functions to FileMaker Pro.";
+/* Version */
+String3 = "0.9";
+/* External functions prototypes go here */
+String101 = "PGrp_Version( versionFormat )";
+String102 = "PGrp_ExecuteSQL( expression )";
+String103 = "PGrp_ExecuteScript( filename; scriptname {; parameter} )";
+String104 = "PGrp_LDistance( text1 ; text2 )";
+String105 = "PGrp_SoundexAmerican( text )";
+String106 = "PGrp_SoundexDM( text )";
+String107 = "PGrp_StringRedux( text )";

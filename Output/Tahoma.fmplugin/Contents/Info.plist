@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+<dict>
+<key>CFBundleIdentifier</key>
+<string>com.proofgroup.tahoma</string>
+<key>CFBundleName</key>
+<string>Tahoma</string>
+<key>CFBundleGetInfoString</key>
+<string>Tahoma version 0.9, Copyright ©2007 by The Proof Group LLC</string>
+<key>CFBundleShortVersionString</key>
+<string>Tahoma version 0.9</string>
+<key>CFBundlePackageType</key>
+<string>BNDL</string>
+<key>CFBundleSignature</key>
+<string>PGrp</string>
+<key>CFBundleVersion</key>
+<string>0.9</string>
+<key>CFBundleDevelopmentRegion</key>
+<string>English</string>
+<key>CFBundleInfoDictionaryVersion</key>
+<string>6.0</string>
+</dict>
+</plist>
+

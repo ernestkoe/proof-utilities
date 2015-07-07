@@ -1,0 +1,60 @@
+24U FM Template Release Notes
+------------------------------
+
+2.2
+
+- added XCode 2.3 project for universal binary builds
+- removed old XCode and CodeWarrior projects
+- documentation updated
+
+2.1.1
+
+- updated for FMPlugInSDK from FileMaker Pro Advanced 8
+- CodeWarrior 9.4 project updated to CodeWarrior 9.5
+- added XCode 2.0 project
+- updated default FileMaker function prototypes to FileMaker's convention
+
+2.1
+
+- idle and preferences handlers are now only defined if they are needed
+- placed Visual Studio .NET project into the "Projects/VisualStudio" folder
+- placed XCode projects into the "Projects/XCode" folder
+- placed CodeWarrior projects into the "Projects/CodeWarrior" folder
+- moved/added function prototypes to prevent "missing prototype" warnings
+- added 24U plist compiler to substitute CodeWarrior's property list
+  compiler which is not available in Xcode 
+- added SemiSafe plug-in idle state level
+- replaced BCD version with 3 separate macros for compatibility with VS.NET
+- added project for CodeWarrior 9.4
+- added project for Xcode 1.5
+- added project for Xcode 1.1
+- added project for MS Visual Studio .NET 2003
+
+
+2.0.1
+
+- Updated function prefixes to X24FT to not collide with FileMaker's
+  plug-in example
+- Turned off the Force C++ compilation target option to be consistent
+  across all targets
+- Added re-entrancy prevention for Preferences()
+
+
+2.0
+
+- Rewritten from scratch for FileMaker Developer 7
+
+
+1.1
+
+- replaced leaky ParamParser.c with ParamParser.cp based on std::vector
+  and std::string
+- updated Mac68kStubFAT.r to a much more stable version 4
+- updated FMTemplate.c to not call idle before initialization and
+  after termination
+- removed Metrowerks CodeWarrior 6 project file
+
+
+1.0
+
+- first version
