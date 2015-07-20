@@ -110,7 +110,8 @@ using namespace std;
 		fmx::errcode FormatNumberWithMask(const fmx::TextAutoPtr& formatThis, const fmx::TextAutoPtr& withThis, fmx::TextAutoPtr& intoThis);
 
 	// Used by FormatNumberWithMask and Do_PGrp_NumToWords.
-		void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis, fmx::ushort* filteredIntoHere, unsigned long& filteredIntoHereMaxSize, bool saveDecimal=false);
+		void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis,
+		fmx::ushort* filteredIntoHere, fmx::ulong& filteredIntoHereMaxSize, bool saveDecimal=false);
 
 	// Used by Do_PGrp_LDistance.
 		void FMTextToString(const fmx::Text &, std::string &);

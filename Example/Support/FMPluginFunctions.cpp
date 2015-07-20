@@ -201,24 +201,17 @@ FMX_PROC(fmx::errcode) Do_PGrp_SoundexDM(short /* funcId */, const fmx::ExprEnv&
 } //Do_PGrp_SoundexDM
 
 
-FMX_PROC(fmx::errcode) Do_PGrp_ExecuteSQL(short /* funcId */, const fmx::ExprEnv& environment, const fmx::DataVect& dataVect, fmx::Data& results)
+FMX_PROC(fmx::errcode) Do_PGrp_ExecuteSQL(
+                short  /* funcId */, 
+  const  fmx::ExprEnv& environment, 
+  const fmx::DataVect& dataVect, 
+            fmx::Data& results)
 {
-	fmx::errcode errorResult = 0;
+    fmx::TextAutoPtr file_name; fmx::DataVectAutoPtr sql_parameters;
 
-	//Grab the row and column separators
-		fmx::ushort		col = static_cast<fmx::ushort>('\v'); // delimiters are defined as 
-		fmx::ushort		row = static_cast<fmx::ushort>('\r'); // so how exactly do we cast the parameters as unsigned short ints
-		fmx::FixPtAutoPtr		test;
-		test->AssignFixPt( dataVect.AtAsNumber(1) ); // we can get it as FixPt, but then ???
-	//	col->AssignUnicode( dataVect.AtAsText(1) );
-	//	row->AssignUnicode( dataVect.AtAsText(2) );
-
-	// This is sooooo unsupported.
-	errorResult = environment.ExecuteSQL( dataVect.AtAsText(0), results, col, row );
-
-
-return(errorResult);
-} // Do_PGrp_ExecuteSQL
+    return environment.ExecuteFileSQLTextResult(dataVect.AtAsText(0),
+            *file_name, *sql_parameters, results, '\v', '\r');
+}
 
 /* FMX_PROC(fmx::errcode) Do_SetsOfSet(short funcId, const fmx::ExprEnv& environment, const fmx::DataVect& dataVect, fmx::Data& results)
 {
@@ -503,8 +496,6 @@ FMX_PROC(fmx::errcode) Do_PGrp_FormatNumber(short /* funcId */, const fmx::ExprE
 
 return(errorResult);
 } // Do_PGrp_FormatNumber
-
-
 
 fmx::errcode FormatNumberWithMask(const fmx::TextAutoPtr& formatThis, const fmx::TextAutoPtr& withThis, fmx::TextAutoPtr& intoThis)
 {
@@ -1102,7 +1093,8 @@ return(tempReturn);
 
 
 
-void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis, fmx::ushort* filteredIntoHere, unsigned long& filteredIntoHereMaxSize, bool saveDecimal)
+void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis, fmx::ushort*
+filteredIntoHere, fmx::ulong& filteredIntoHereMaxSize, bool saveDecimal)
 {
 	unsigned long	filterThisSize(filterThis->GetSize());
 	if((filterThisSize > 0) && (filteredIntoHere != NULL) && (filteredIntoHereMaxSize > 0))
