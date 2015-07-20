@@ -102,7 +102,8 @@ using namespace std;
 
 
 	// Used by Do_PluginInit, FMExternCallProc, and the example functions listed above.
-		void Do_GetString(unsigned long whichString, FMX_ULong winLangID, FMX_Long resultsize, FMX_Unichar* string);
+		void Do_GetString(unsigned long whichString, fmx::uint32
+		winLangID, fmx::int32 resultsize, fmx::unichar* string);
 		void Do_GetString(unsigned long whichString,  fmx::TextAutoPtr& intoHere, bool stripFunctionParams = false);
 
 
@@ -111,7 +112,7 @@ using namespace std;
 
 	// Used by FormatNumberWithMask and Do_PGrp_NumToWords.
 		void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis,
-		fmx::ushort* filteredIntoHere, fmx::ulong& filteredIntoHereMaxSize, bool saveDecimal=false);
+		fmx::uint16* filteredIntoHere, fmx::uint32& filteredIntoHereMaxSize, bool saveDecimal=false);
 
 	// Used by Do_PGrp_LDistance.
 		void FMTextToString(const fmx::Text &, std::string &);

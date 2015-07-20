@@ -126,11 +126,11 @@ FMPluginTahomaPrefsDialog::~FMPluginTahomaPrefsDialog(void)
 bool FMPluginTahomaPrefsDialog::DisplayAndGetPrefs(void)
 {
 	bool			tempReturn = false;
-	fmx::ushort*	textEditResult = NULL;
+	fmx::uint16*	textEditResult = NULL;
 
 
 	#if defined(FMX_WIN_TARGET)
-		textEditResult = (fmx::ushort *)(DialogBox((HINSTANCE)(gFMX_ExternCallPtr->instanceID), MAKEINTRESOURCE(kFMEX_RES_DIALOGID), (HWND)mParentDialogRef, (DLGPROC)PrefsDialog_WinProc));
+		textEditResult = (fmx::uint16 *)(DialogBox((HINSTANCE)(gFMX_ExternCallPtr->instanceID), MAKEINTRESOURCE(kFMEX_RES_DIALOGID), (HWND)mParentDialogRef, (DLGPROC)PrefsDialog_WinProc));
 	#endif
 
 	#if defined(FMX_MAC_TARGET)
@@ -138,7 +138,7 @@ bool FMPluginTahomaPrefsDialog::DisplayAndGetPrefs(void)
  		ShowWindow( (WindowRef)(mDialogRef) );
  		
  		RunAppModalLoopForWindow( (WindowRef)(mDialogRef) );
- 		textEditResult = (fmx::ushort *)( GetWRefCon((WindowRef)(mDialogRef)) );
+ 		textEditResult = (fmx::uint16 *)( GetWRefCon((WindowRef)(mDialogRef)) );
  		
 	    HideWindow((WindowRef)(mDialogRef));
 	#endif // FMX_MAC_TARGET
@@ -306,7 +306,9 @@ bool FMPluginTahomaPrefsWidget::Read(void)
 		{
 			// This creates the formatting string preference which is the only preference the example plug-in has.
 				
-				DWORD lpExpectedSize = (kPGrp_FilterMaxBufferSize-1) * sizeof(fmx::ushort);
+				DWORD lpExpectedSize =
+				(kPGrp_FilterMaxBufferSize-1) *
+				sizeof(fmx::uint16);
 				DWORD lpExpectedType = REG_SZ;
 				mDefaultFormatString[0] = 0;
 				mDefaultFormatResult = 0;
@@ -320,7 +322,8 @@ bool FMPluginTahomaPrefsWidget::Read(void)
 
 				if(regResult == ERROR_SUCCESS)
 				{
-					mDefaultFormatResult = (lpExpectedSize / sizeof(fmx::ushort) - 1); // -1 to ignore trailing null
+					mDefaultFormatResult = (lpExpectedSize
+					/ sizeof(fmx::uint16) - 1); // -1 to ignore trailing null
 					gFMPluginTahomaPrefs.formattingStringTxt->AssignUnicode(mDefaultFormatString);
 					tempReturn = true;
 
@@ -422,7 +425,9 @@ bool FMPluginTahomaPrefsWidget::Write(void)
 								0,
 								REG_SZ,
 								(BYTE*)mDefaultFormatString,
-								mDefaultFormatResult * sizeof(fmx::ushort));
+								mDefaultFormatResult
+								*
+								sizeof(fmx::uint16));
 
 				tempReturn = (regResult == ERROR_SUCCESS);
 
@@ -542,7 +547,7 @@ void FMPluginTahomaPrefsWidget::GetLocaleSettings(void)
 
 void Win_SetEditWithDefaultFormatString(HWND mydlg, bool fromGlobalPrefs)
 {
-	fmx::ushort		defaultFormatString[kPGrp_FilterMaxBufferSize];
+	fmx::uint16		defaultFormatString[kPGrp_FilterMaxBufferSize];
 	int				defaultFormatResult = 0;
 
 	if(fromGlobalPrefs)
@@ -614,7 +619,8 @@ BOOL APIENTRY PrefsDialog_WinProc(HWND mydlg, UINT dlgMsg, WPARAM wparm, LONG lp
 				case IDOK:
 				{
 					// This gets the format string from the edit text item.
-					fmx::ushort*	textEditString = new(std::nothrow) fmx::ushort[kPGrp_FilterMaxBufferSize];
+					fmx::uint16*	textEditString =
+					new(std::nothrow) fmx::uint16[kPGrp_FilterMaxBufferSize];
 					if(textEditString != NULL)
 					{
 						int				textEditResult = 0;
@@ -681,7 +687,7 @@ return FALSE;
 
 void OSX_SetEditWithDefaultFormatString(WindowRef dialogRef, bool fromGlobalPrefs)
 {
-	fmx::ushort		defaultFormatString[kPGrp_FilterMaxBufferSize];
+	fmx::uint16		defaultFormatString[kPGrp_FilterMaxBufferSize];
 	int				defaultFormatResult = 0;
 
 
@@ -734,7 +740,7 @@ void OSX_SetEditWithDefaultFormatString(WindowRef dialogRef, bool fromGlobalPref
 
 
 
-int OSX_GetEditFormatString(WindowRef dialogRef, fmx::ushort* intoHere, long maxAlloced)
+int OSX_GetEditFormatString(WindowRef dialogRef, fmx::uint16* intoHere, long maxAlloced)
 {
 	long		tempResult = 0;
 	
@@ -786,7 +792,8 @@ pascal OSStatus PrefsDialog_MacProc(EventHandlerCallRef /* myHandler */, EventRe
         case 'ok  ': // User done
         {
 			// This gets the format string from the edit text item.
-			fmx::ushort*	textEditString = new(std::nothrow) fmx::ushort[kPGrp_FilterMaxBufferSize];
+			fmx::uint16*	textEditString = new(std::nothrow)
+			fmx::uint16[kPGrp_FilterMaxBufferSize];
 			if(textEditString != NULL)
 			{
 				int				textEditResult = 0;

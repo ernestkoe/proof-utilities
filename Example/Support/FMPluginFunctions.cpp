@@ -363,14 +363,15 @@ FMX_PROC(fmx::errcode) Do_PGrp_Append(short /* funcId */, const fmx::ExprEnv& /*
 
 	// Append an arbitrary number of strings together.
 		fmx::TextAutoPtr	resultTxt;
-		fmx::ulong nParams = dataVect.Size();
-		fmx::ulong j;
+		fmx::uint32 nParams = dataVect.Size();
+		fmx::uint32 j;
 
 		if (nParams > 0)
 		{
 			for ( j = 0; j < nParams; j++ )
 			{
-				resultTxt->AppendText( dataVect.AtAsText(j), 0, static_cast<fmx::ulong>(-1) );
+				resultTxt->AppendText( dataVect.AtAsText(j),
+				0, static_cast<fmx::uint32>(-1) );
 			}
 
 			results.SetAsText( *resultTxt, dataVect.At(0).GetLocale() );
@@ -404,7 +405,7 @@ FMX_PROC(fmx::errcode) Do_PGrp_StartScript(short /* funcId */, const fmx::ExprEn
 {
 	fmx::errcode errorResult = 0;
 	
-	fmx::ulong nParams = dataVect.Size();
+	fmx::uint32 nParams = dataVect.Size();
 
 	if (nParams > 1)
 	{
@@ -453,7 +454,7 @@ return(errorResult);
 FMX_PROC(fmx::errcode) Do_PGrp_UserFormatNumber(short /* funcId */, const fmx::ExprEnv& /* environment */, const fmx::DataVect& dataVect, fmx::Data& results)
 {
 	fmx::errcode		errorResult = -1;
-	fmx::ulong			numParams = dataVect.Size();
+	fmx::uint32			numParams = dataVect.Size();
 	
 	if(numParams == 1) // This function should have been given only one parameter.
 	{
@@ -476,7 +477,7 @@ return(errorResult);
 FMX_PROC(fmx::errcode) Do_PGrp_FormatNumber(short /* funcId */, const fmx::ExprEnv& /* environment */, const fmx::DataVect& dataVect, fmx::Data& results)
 {
 	fmx::errcode		errorResult = -1;
-	fmx::ulong			numParams = dataVect.Size();
+	fmx::uint32			numParams = dataVect.Size();
 	
 	if(numParams == 2) // This function needs at least two parameters. 
 	{
@@ -499,8 +500,8 @@ return(errorResult);
 
 fmx::errcode FormatNumberWithMask(const fmx::TextAutoPtr& formatThis, const fmx::TextAutoPtr& withThis, fmx::TextAutoPtr& intoThis)
 {
-	fmx::ulong		enteredTxtSize = formatThis->GetSize();
-	fmx::ulong		formatterStringTxtSize = withThis->GetSize();
+	fmx::uint32		enteredTxtSize = formatThis->GetSize();
+	fmx::uint32		formatterStringTxtSize = withThis->GetSize();
 
 
 	// By default, this function will return "-01", which means an error occurred, and will also
@@ -514,7 +515,7 @@ fmx::errcode FormatNumberWithMask(const fmx::TextAutoPtr& formatThis, const fmx:
 	//	be used as the result of the function.
 	fmx::errcode	errorResult = -1;
 	{
-		fmx::ushort	tempErrChars[4];
+		fmx::uint16	tempErrChars[4];
 		tempErrChars[0] = 0x002D; // '-'
 		tempErrChars[1] = 0x0030; // '0'
 		tempErrChars[2] = 0x0031; // '1'
@@ -529,16 +530,16 @@ fmx::errcode FormatNumberWithMask(const fmx::TextAutoPtr& formatThis, const fmx:
 		(enteredTxtSize < kPGrp_FilterMaxBufferSize) && (formatterStringTxtSize < kPGrp_FilterMaxBufferSize) )
 	{
 		//  Now filter input from the user and loop through the parameter, copying only 0-9 into filteredTxt.
-		fmx::ulong		filteredTxtSize = kPGrp_FilterMaxBufferSize;
-		fmx::ushort		filteredTxt[kPGrp_FilterMaxBufferSize];
+		fmx::uint32		filteredTxtSize = kPGrp_FilterMaxBufferSize;
+		fmx::uint16		filteredTxt[kPGrp_FilterMaxBufferSize];
 		Sub_GetFilteredChars(formatThis, filteredTxt, filteredTxtSize);
 
 		if(filteredTxtSize > 0)
 		{
-			fmx::ushort		formatterStringTxt[kPGrp_FilterMaxBufferSize];
+			fmx::uint16		formatterStringTxt[kPGrp_FilterMaxBufferSize];
 			withThis->GetUnicode(formatterStringTxt, 0, formatterStringTxtSize);
 
-			fmx::ushort		tempUnichar = 0;
+			fmx::uint16		tempUnichar = 0;
 			unsigned long	onChar = 0;
 			unsigned long	numOfnumerics = 0;
 
@@ -561,7 +562,7 @@ fmx::errcode FormatNumberWithMask(const fmx::TextAutoPtr& formatThis, const fmx:
 				if( (numOfnumerics > 0) && (filteredTxtSize <= numOfnumerics) )
 				{
 					// The output is always the same as the formatting string.
-					fmx::ushort		formattedTxt[kPGrp_FilterMaxBufferSize];
+					fmx::uint16		formattedTxt[kPGrp_FilterMaxBufferSize];
 
 					// Loop backwards, replacing the #s of the formatter string with the numbers of the user provided string.
 					unsigned long		filteredTxtCharsLeft = filteredTxtSize;
@@ -611,7 +612,7 @@ return(errorResult);
 FMX_PROC(fmx::errcode) Do_PGrp_NumToWords(short /* funcId */, const fmx::ExprEnv& /* environment */, const fmx::DataVect& dataVect, fmx::Data& results)
 {
 	fmx::errcode		errorResult = -1;
-	fmx::ulong			numParams = dataVect.Size();
+	fmx::uint32			numParams = dataVect.Size();
 	fmx::TextAutoPtr	tempResult;
 
 	if(numParams == 1) // The plug-in should have been given only one parameter.
@@ -624,7 +625,7 @@ FMX_PROC(fmx::errcode) Do_PGrp_NumToWords(short /* funcId */, const fmx::ExprEnv
 		// By default, this function will return "-01", which means an error occurred and will also
 		// return an error code. (See also FormatNumberWithMask.)
 		{
-			fmx::ushort	tempErrChars[4];
+			fmx::uint16	tempErrChars[4];
 			tempErrChars[0] = 0x002D; // '-'
 			tempErrChars[1] = 0x0030; // '0'
 			tempErrChars[2] = 0x0031; // '1'
@@ -636,8 +637,8 @@ FMX_PROC(fmx::errcode) Do_PGrp_NumToWords(short /* funcId */, const fmx::ExprEnv
 		//First "compact" the number by removing all non-numbers. Locate the decimal 
 		//	separator (stored in gFMPluginTahomaPrefs.decimalPoint) to use as a point of reference and cut off anything
 		//	beyond two digits to the right of the decimal point.
-		fmx::ulong		filteredTxtSize = kPGrp_FilterMaxBufferSize-4; // Leave room for trailing ".00" if needed.
-		fmx::ushort		filteredTxt[kPGrp_FilterMaxBufferSize];
+		fmx::uint32		filteredTxtSize = kPGrp_FilterMaxBufferSize-4; // Leave room for trailing ".00" if needed.
+		fmx::uint16		filteredTxt[kPGrp_FilterMaxBufferSize];
 		Sub_GetFilteredChars(enteredTxt, filteredTxt, filteredTxtSize, true); 
 
 		if(filteredTxtSize > 0)
@@ -1093,8 +1094,8 @@ return(tempReturn);
 
 
 
-void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis, fmx::ushort*
-filteredIntoHere, fmx::ulong& filteredIntoHereMaxSize, bool saveDecimal)
+void Sub_GetFilteredChars(const fmx::TextAutoPtr& filterThis, fmx::uint16*
+filteredIntoHere, fmx::uint32& filteredIntoHereMaxSize, bool saveDecimal)
 {
 	unsigned long	filterThisSize(filterThis->GetSize());
 	if((filterThisSize > 0) && (filteredIntoHere != NULL) && (filteredIntoHereMaxSize > 0))
@@ -1102,13 +1103,13 @@ filteredIntoHere, fmx::ulong& filteredIntoHereMaxSize, bool saveDecimal)
 		unsigned long	tempSize = 0;
 		filteredIntoHere[0] = 0;
 
-		fmx::ushort		tempScanBuffer[kPGrp_FilterMaxBufferSize];
+		fmx::uint16		tempScanBuffer[kPGrp_FilterMaxBufferSize];
 		filterThis->GetUnicode(tempScanBuffer, 0, filterThisSize);
 
 		bool			gotNonLeadingZero = false;
 		bool			alreadyGotADecimal = false;
 		bool			curUnicharIsValidNumber = false;
-		fmx::ushort		tempUnichar = 0;
+		fmx::uint16		tempUnichar = 0;
 		for(unsigned long onChar=0; (onChar<filterThisSize) && (tempSize<filteredIntoHereMaxSize); onChar++)
 		{
 			tempUnichar = tempScanBuffer[onChar];
@@ -1667,7 +1668,8 @@ void SetRecurse(stack<string> uc, stack<string> c, vector<string> &result, const
 
 
 
-void Do_GetString(unsigned long whichString, FMX_ULong /* winLangID */, FMX_Long resultsize, FMX_Unichar* string)
+void Do_GetString(unsigned long whichString, fmx::uint32 /* winLangID */,
+fmx::int32 resultsize, fmx::unichar* string)
 {
 	bool		processedSpecialStringID = false;
 

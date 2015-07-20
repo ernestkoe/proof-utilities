@@ -56,7 +56,7 @@
 
 
 /* ::=- Do_PluginInit =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=:: */
-static FMX_Long Do_PluginInit(FMX_Short version) 
+static fmx::int32 Do_PluginInit(fmx::int16 version) 
 {
 	// Check the app API version
 	if ((version < k70ExtnVersion) || (version > kMaxExtnVersion)) 
@@ -88,7 +88,7 @@ static FMX_Long Do_PluginInit(FMX_Short version)
 	fmx::TextAutoPtr		name;
 	fmx::TextAutoPtr		prototype;
 	fmx::errcode			err;
-	fmx::ulong				regFunctionFlags = fmx::ExprEnv::kMayEvaluateOnServer | fmx::ExprEnv::kDisplayInAllDialogs;
+	fmx::uint32				regFunctionFlags = fmx::ExprEnv::kMayEvaluateOnServer | fmx::ExprEnv::kDisplayInAllDialogs;
 
 	Do_GetString(kPGrp_AddStringID, name, true);
 	Do_GetString(kPGrp_AddStringID, prototype);

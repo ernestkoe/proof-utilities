@@ -93,7 +93,7 @@
 				bool Write(void); 
 
 			private:
-				fmx::ushort		mDefaultFormatString[kPGrp_FilterMaxBufferSize];
+				fmx::uint16		mDefaultFormatString[kPGrp_FilterMaxBufferSize];
 				int				mDefaultFormatResult;
 			
 				void GetDefaults(void);
