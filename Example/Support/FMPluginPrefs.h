@@ -72,7 +72,8 @@
 		
 			pascal OSStatus PrefsDialog_MacProc(EventHandlerCallRef myHandler, EventRef eventRef, void* userData);
 			void OSX_SetEditWithDefaultFormatString(WindowRef dialogRef, bool fromGlobalPrefs);
-			int OSX_GetEditFormatString(WindowRef dialogRef, fmx::ushort* intoHere, long maxAlloced);
+			int OSX_GetEditFormatString(WindowRef dialogRef,
+                        fmx::uint16* intoHere, long maxAlloced);
 			
 		#endif // FMX_MAC_TARGET
 

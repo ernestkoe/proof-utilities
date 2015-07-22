@@ -1,28 +1,7 @@
 # Compile the plug-in in 32- and 64-bit mode
 
 
-
-
-
-.PHONY: proof proof-32 proof-64
-
-tahoma-c = \
-  $(patsubst Example/%.cpp, %, $(wildcard Example/*.cpp) \
-                               $(wildcard Example/Support/*.cpp))
-tahoma_win_32_o = $(addprefix build/win/32/,$(addsuffix .obj,$(tahoma-c)))
-tahoma_win_64_o = $(addprefix build/win/64/,$(addsuffix .obj,$(tahoma-c)))
-tahoma_mac_32_o = $(addprefix build/mac/32/,$(addsuffix .o  ,$(tahoma-c)))
-tahoma_mac_64_o = $(addprefix build/mac/64/,$(addsuffix .o  ,$(tahoma-c)))
-
-$(info $(tahoma_win_64_o))
-
-tahoma_win_32_res = build/win/32/FMPluginExample.res
-tahoma_win_64_res = build/win/64/FMPluginExample.res
-tahoma_win_res = build/win/FMPluginExample.res
-
-tahoma_win_32 = build/win/32/Tahoma.fmx
-tahoma_win_64 = build/win/64/Tahoma.fmx64
-
+##############################################################################
 # Rule to output colored messages
 
 define MESSAGE
@@ -33,18 +12,52 @@ define MESSAGE
     else r=""         ; g=""         ; y=""         ; b=""         ; \
          R=""         ; G=""         ; Y=""         ; B=""         ; \
          z=""     ; \
-  fi ; echo -e
+  fi ; printf 
 endef
 
+##############################################################################
 # Rule to automatically add directories.
 
 define MAKE-PARENT-DIRECTORY   # $@
-  $(MESSAGE) "$${y}Creating directory:$${z} $(@D)"
+  $(MESSAGE) "$${y}Creating directory:$${z} $(@D)\n"
   mkdir -p $(@D)
 endef
 define MAKE-PARENT-DIRECTORY?   # $@
   $(if $(wildcard $(@D)),,$(MAKE-PARENT-DIRECTORY))
 endef
+
+# Legend
+#   -p  create intermediate directories as required
+
+##############################################################################
+# Determine the current platform
+
+ifeq ($(shell uname -s),Darwin)
+  platform := mac
+else ifeq ($(shell uname -o),Cygwin)
+  platform := win
+endif
+
+.PHONY: proof proof-32 proof-64
+
+tahoma-c = \
+  $(patsubst Example/%.cpp, %, $(wildcard Example/*.cpp) \
+                               $(wildcard Example/Support/*.cpp))
+tahoma_win_32_o = $(addprefix build/win/32/,$(addsuffix .obj,$(tahoma-c)))
+tahoma_win_64_o = $(addprefix build/win/64/,$(addsuffix .obj,$(tahoma-c)))
+tahoma_mac_o    = $(addprefix build/mac/,$(addsuffix .o  ,$(tahoma-c)))
+
+tahoma_mac_32_o = $(addprefix build/mac/32/,$(addsuffix .o  ,$(tahoma-c)))
+tahoma_mac_64_o = $(addprefix build/mac/64/,$(addsuffix .o  ,$(tahoma-c)))
+
+$(info $(tahoma_mac_o))
+
+tahoma_win_32_res = build/win/32/FMPluginExample.res
+tahoma_win_64_res = build/win/64/FMPluginExample.res
+tahoma_win_res = build/win/FMPluginExample.res
+
+tahoma_win_32 = build/win/32/Tahoma.fmx
+tahoma_win_64 = build/win/64/Tahoma.fmx64
 
 # Standard CPP compilation flags
 
@@ -84,46 +97,64 @@ build/win/64/Tahoma.fmx64: $(tahoma_win_64_o) $(tahoma_win_64_res)
 	link -dll -machine:x64 -manifest:no $^ advapi32.lib user32.lib \
 	PlugInSDK/Libraries/Win/x64/FMWrapper.lib -out:$@
 
-# Correct environment variables for the 32-bit compiler
+##############################################################################
+# Building Mac versions
 
-WIN-MVS = C:\Program Files (x86)\Microsoft Visual Studio 10.0
-WIN-SDK = C:\Program Files\Microsoft SDKs\Windows\v7.1
+build/mac/%.o: Example/%.cpp
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
+	g++ $(CPPFLAGS) -arch i386 -c \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4 \
+        -o$@ $<
 
-# The INCLUDE variable is same for both 32- and 64-bit builds.
 
-build/win/32/% build/win/64/%: \
-  export INCLUDE = $(WIN-MVS)\VC\include;$(WIN-SDK)\Include;
+##############################################################################
+# Windows-specific settings
 
-# The APPVER (minimal target OS) is also same and I set it to Windows XP
+ifeq ($(platform),win)
+  # Correct environment variables for the 32-bit compiler
 
-build/win/32/% build/win/64/%:
-  export APPVER = 5.01
+  WIN-MVS = C:\Program Files (x86)\Microsoft Visual Studio 10.0
+  WIN-SDK = C:\Program Files\Microsoft SDKs\Windows\v7.1
 
-# The LIB variable differs
+  # The INCLUDE variable is same for both 32- and 64-bit builds.
 
-build/win/32/%: \
-  export LIB := $(WIN-MVS)\VC\lib;$(WIN-SDK)\Lib;
-build/win/64/%: \
-  export LIB := $(WIN-MVS)\VC\lib\amd64;$(WIN-SDK)\Lib\x64;
+  build/win/32/% build/win/64/%: \
+    export INCLUDE = $(WIN-MVS)\VC\include;$(WIN-SDK)\Include;
 
-# Finally I need to alter the PATH to point to right directories:
+  # The APPVER (minimal target OS) is also same and I set it to Windows XP
 
-WIN-PATH-COMMON = \
-$(shell cygpath "$(WIN-MVS)\Common7\IDE"):$(shell cygpath "$(WIN-MVS)\VC\vcpackages")
+  build/win/32/% build/win/64/%:
+    export APPVER = 5.01
 
-build/win/32/%: export PATH := \
-$(shell cygpath "$(WIN-MVS)\VC\bin"):$(shell cygpath "$(WIN-SDK)\Bin"):$(WIN-PATH-COMMON):$(PATH)
+  # The LIB variable differs
 
-build/win/64/%: export PATH := \
-$(shell cygpath "$(WIN-MVS)\VC\bin\amd64"):$(shell cygpath "$(WIN-SDK)\Bin\x64"):$(WIN-PATH-COMMON):$(PATH)
+  build/win/32/%: \
+    export LIB := $(WIN-MVS)\VC\lib;$(WIN-SDK)\Lib;
+  build/win/64/%: \
+    export LIB := $(WIN-MVS)\VC\lib\amd64;$(WIN-SDK)\Lib\x64;
+
+  # Finally I need to alter the PATH to point to right directories:
+
+  WIN-PATH-COMMON = \
+  $(shell cygpath "$(WIN-MVS)\Common7\IDE"):$(shell cygpath "$(WIN-MVS)\VC\vcpackages")
+
+  build/win/32/%: export PATH := \
+  $(shell cygpath "$(WIN-MVS)\VC\bin"):$(shell cygpath "$(WIN-SDK)\Bin"):$(WIN-PATH-COMMON):$(PATH)
+
+  build/win/64/%: export PATH := \
+  $(shell cygpath "$(WIN-MVS)\VC\bin\amd64"):$(shell cygpath "$(WIN-SDK)\Bin\x64"):$(WIN-PATH-COMMON):$(PATH)
+endif
 
 
 .PHONY: tahoma-win-32 tahoma-win-32-o \
-        tahoma-win-64 tahoma-win-64-o
+        tahoma-win-64 tahoma-win-64-o \
+        tahoma-mac tahoma-mac-o
 tahoma-win-32: $(tahoma_win_32)
 tahoma-win-32-o: $(tahoma_win_32_o) $(tahoma_win_res)
 tahoma-win-64: $(tahoma_win_64)
 tahoma-win-64-o: $(tahoma_win_64_o) $(tahoma_win_res)
+tahoma-mac-o: $(tahoma_mac_o)
 
 
 .PHONY: test
