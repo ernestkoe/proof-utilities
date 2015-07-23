@@ -67,7 +67,7 @@ CPPFLAGS += -IExample/Support -IPlugInSDK/Headers
 
 build/win/32/%.obj build/win/64/%.obj: Example/%.cpp
 	@$(MAKE-PARENT-DIRECTORY?)
-	@$(MESSAGE) "$${g}[Compiling C++]$${z}"
+	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
 	cl $(CPPFLAGS) -c -EHsc -Fo$@ $<
 
 # -c    : compile only
@@ -78,14 +78,14 @@ build/win/32/%.obj build/win/64/%.obj: Example/%.cpp
 
 build/win/32/%.res build/win/64/%.res: Example/Support/%.rc
 	@$(MAKE-PARENT-DIRECTORY?)
-	@$(MESSAGE) "$${g}[Compiling Windows resources]$${z}"
+	@$(MESSAGE) "$${g}[Compiling Windows resources]$${z} "
 	rc -nologo -IExample -Fo$@ $<
 
 # Rule to build the Win32 version
 
 build/win/32/Tahoma.fmx: $(tahoma_win_32_o) $(tahoma_win_32_res)
 	@$(MAKE-PARENT-DIRECTORY?)
-	$(MESSAGE) "$${g}[Linking Windows 32-bit version]$${z}"
+	$(MESSAGE) "$${g}[Linking Windows 32-bit version]$${z} "
 	link -dll -machine:x86 -manifest:no $^ advapi32.lib user32.lib \
 	PlugInSDK/Libraries/Win/win32/FMWrapper.lib -out:$@
 
@@ -93,7 +93,7 @@ build/win/32/Tahoma.fmx: $(tahoma_win_32_o) $(tahoma_win_32_res)
 
 build/win/64/Tahoma.fmx64: $(tahoma_win_64_o) $(tahoma_win_64_res)
 	@$(MAKE-PARENT-DIRECTORY?)
-	$(MESSAGE) "$${g}[Linking Windows 64-bit version]$${z}"
+	$(MESSAGE) "$${g}[Linking Windows 64-bit version]$${z} "
 	link -dll -machine:x64 -manifest:no $^ advapi32.lib user32.lib \
 	PlugInSDK/Libraries/Win/x64/FMWrapper.lib -out:$@
 
