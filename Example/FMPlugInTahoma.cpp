@@ -41,6 +41,10 @@ static struct plugin_function_definition {
        &Do_PGrp_SoundexAmerican },
   {  112, "PGrp_SoundexDM( text )"        , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_SoundexDM },
+  {  109, "PGrp_Version"                  , 0, 0, DEFAULT_FLAGS,
+       &Do_PGrp_Version },
+  {  114, "PGrp_Redux( text )"            , 1, 1, DEFAULT_FLAGS,
+       &Do_PGrp_Redux },
   {    0, NULL }
 };
 
