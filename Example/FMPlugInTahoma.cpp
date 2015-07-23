@@ -32,8 +32,11 @@ static const unsigned long DEFAULT_FLAGS =
 
 static struct plugin_function_definition {
   short id; const char *signature; short min, max; fmx::uint32 flags; 
-  fmx::errcode (__stdcall *callable)(short, const fmx::ExprEnv&, 
-  const fmx::DataVect&, fmx::Data&);
+  fmx::errcode (
+#ifdef FMX_WIN_TARGET
+  __stdcall
+#endif  
+  *callable)(short, const fmx::ExprEnv&, const fmx::DataVect&, fmx::Data&);
 } plugin_functions[] = {
   {  110, "PGrp_LDistance( text1; text2 )", 2, 2, DEFAULT_FLAGS,
        &Do_PGrp_LDistance },
@@ -265,7 +268,7 @@ Do_PluginShutdown(void)
 
 } // Do_PluginShutdown
 
-static char* plugin_strings[] = {
+static const char* plugin_strings[] = {
     "PGrp"   /* Plugin-ID */
        "1"   /* fixed value */
        "n"   /* no configuration */
