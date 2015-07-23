@@ -103,7 +103,7 @@ build/win/64/Tahoma.fmx64: $(tahoma_win_64_o) $(tahoma_win_64_res)
 build/mac/%.o: Example/%.cpp
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
-	g++ $(CPPFLAGS) -arch i386 -c \
+	g++ $(CPPFLAGS) -arch i386 -arch x86_64 -c \
         -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4 \
         -o$@ $<
 
