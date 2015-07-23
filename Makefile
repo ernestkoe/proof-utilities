@@ -47,6 +47,8 @@ tahoma_win_32_o = $(addprefix build/win/32/,$(addsuffix .obj,$(tahoma-c)))
 tahoma_win_64_o = $(addprefix build/win/64/,$(addsuffix .obj,$(tahoma-c)))
 tahoma_mac_o    = $(addprefix build/mac/,$(addsuffix .o  ,$(tahoma-c)))
 
+tahoma_mac      = build/mac/Tahoma
+
 tahoma_mac_32_o = $(addprefix build/mac/32/,$(addsuffix .o  ,$(tahoma-c)))
 tahoma_mac_64_o = $(addprefix build/mac/64/,$(addsuffix .o  ,$(tahoma-c)))
 
@@ -107,6 +109,12 @@ build/mac/%.o: Example/%.cpp
         -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4 \
         -o$@ $<
 
+build/mac/Tahoma: $(tahoma_mac_o)
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Linking Mac code]$${z} "
+	g++ -arch i386 -arch x86_64 -bundle -FPluginSDK/Libraries/Mac \
+        -framework FMWrapper -o$@ $^ \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4
 
 ##############################################################################
 # Windows-specific settings
@@ -154,6 +162,7 @@ tahoma-win-32: $(tahoma_win_32)
 tahoma-win-32-o: $(tahoma_win_32_o) $(tahoma_win_res)
 tahoma-win-64: $(tahoma_win_64)
 tahoma-win-64-o: $(tahoma_win_64_o) $(tahoma_win_res)
+tahoma-mac: $(tahoma_mac)
 tahoma-mac-o: $(tahoma_mac_o)
 
 
