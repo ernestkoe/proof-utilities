@@ -22,6 +22,70 @@
 #include "Support/FMPluginFunctions.h"
 #include "Support/FMPluginPrefs.h"
 
+/****************************************************************************
+ * Functions                                                                *
+ ****************************************************************************/
+
+static const unsigned long DEFAULT_FLAGS = 
+    fmx::ExprEnv::kMayEvaluateOnServer
+  | fmx::ExprEnv::kDisplayInAllDialogs;
+
+static struct plugin_function_definition {
+  short id; const char *signature; short min, max; fmx::uint32 flags; 
+  fmx::errcode (__stdcall *callable)(short, const fmx::ExprEnv&, 
+  const fmx::DataVect&, fmx::Data&);
+} plugin_functions[] = {
+  {  110, "PGrp_LDistance( text1; text2 )", 2, 2, DEFAULT_FLAGS,
+       &Do_PGrp_LDistance },
+  {  111, "PGrp_SoundexAM( text )"        , 1, 1, DEFAULT_FLAGS,
+       &Do_PGrp_SoundexAmerican },
+  {  112, "PGrp_SoundexDM( text )"        , 1, 1, DEFAULT_FLAGS,
+       &Do_PGrp_SoundexDM },
+  {    0, NULL }
+};
+
+static fmx::int32 
+Do_PluginInit2(fmx::int16 version) 
+{
+    // Check the app API version
+    if ((version < k70ExtnVersion) || (kMaxExtnVersion < version))
+        return (kBadExtnVersion);
+
+    // Register plug-in functions
+    fmx::QuadCharAutoPtr plugin('P', 'G', 'r', 'p');
+    fmx::errcode error;
+    struct plugin_function_definition *cursor;
+
+    for (cursor = plugin_functions; cursor->signature; ++cursor) {
+        fmx::TextAutoPtr name, desc; const char *parenthesis;
+
+        desc->Assign(cursor->signature, fmx::Text::kEncoding_UTF8);
+        if (!(parenthesis = strchr(cursor->signature, '(')))
+            name->Assign(cursor->signature, fmx::Text::kEncoding_UTF8);
+        else
+            name->AssignWithLength(cursor->signature, parenthesis -
+                    cursor->signature, fmx::Text::kEncoding_UTF8);
+        if ((error = fmx::ExprEnv::RegisterExternalFunction(*plugin,
+                cursor->id, *name, *desc, cursor->min, cursor->max, 
+                cursor->flags, cursor->callable))) {
+            while (cursor-- != plugin_functions)
+                fmx::ExprEnv::UnRegisterExternalFunction(*plugin, cursor->id);
+            return kDoNotEnable;
+        }
+    }
+    return kCurrentExtnVersion;
+}
+
+static void
+Do_PluginShutdown2(void)
+{
+    fmx::QuadCharAutoPtr plugin('P', 'G', 'r', 'p');
+    plugin_function_definition *cursor; 
+
+    for (cursor = plugin_functions; cursor->signature; ++cursor)
+        fmx::ExprEnv::UnRegisterExternalFunction(*plugin, cursor->id);
+}
+
 
 
 // ====== "FMPluginTahoma.h" =================================================================================
@@ -155,36 +219,26 @@ static fmx::int32 Do_PluginInit(fmx::int16 version)
 
 
 
-/* ::=- Do_PluginIdle =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=:: */
-static void Do_PluginIdle(FMX_IdleLevel idleLevel) 
+static void 
+Do_PluginIdle(FMX_IdleLevel idleLevel) 
 {
-	// Check idle state
-	switch (idleLevel)
-	{
-		case kFMXT_UserIdle:
-		{
-			// The plug-in is free to do idle processing at this time.
-		}
-		break;
+    // Check idle state
+    switch (idleLevel) {
+        case kFMXT_UserIdle:
+            // The plug-in is free to do idle processing at this time.
+            break;
+        case kFMXT_UserNotIdle:
+        case kFMXT_ScriptPaused:
+        case kFMXT_ScriptRunning:
+        case kFMXT_Unsafe:
+            // The plug-in should wait and do nothing at this time.
+            break;
+    }
+}
 
-		case kFMXT_UserNotIdle:
-		case kFMXT_ScriptPaused:
-		case kFMXT_ScriptRunning:
-		case kFMXT_Unsafe:
-		{
-			// The plug-in should wait and do nothing at this time.
-		}
-		break;
-	}// switch idleLevel
-
-} // Do_PluginIdle
-
-
-
-/* ::=- Do_PluginShutdown =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=:: */
-static void Do_PluginShutdown(void) 
+static void 
+Do_PluginShutdown(void) 
 {
-
 	// Unregister plug-in functions
 	fmx::QuadCharAutoPtr	pluginID('P', 'G', 'r', 'p');
 	fmx::errcode			err;
@@ -207,49 +261,60 @@ static void Do_PluginShutdown(void)
 
 } // Do_PluginShutdown
 
+static char* plugin_strings[] = {
+    "PGrp"   /* Plugin-ID */
+       "1"   /* fixed value */
+       "n"   /* no configuration */
+       "n"   /* no old API */
+       "Y"   /* fixed value */
+       "n"   /* no idle time */
+       "nn", /* fixed value */
+    "Tahoma",
+    "Tahoma String Utilities plug-in. This plug-in was derived from the "
+        "FMExample plug-in."
+};
 
-
-/* ::=- FMExternCallProc "Main" =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=:: */
-void FMX_ENTRYPT FMExternCallProc(FMX_ExternCallPtr pb)
+static void
+Do_GetString2(fmx::uchar type, fmx::ptrtype limit, fmx::unichar *target)
 {
-	// Setup global defined in FMxExtern.h
-	gFMX_ExternCallPtr = pb;
+    const char *source; fmx::ptrtype i;
 
-	// Message dispatcher
-	switch (gFMX_ExternCallPtr->whichCall) 
-	{
-		case kFMXT_Init:
-		{
-			gFMX_ExternCallPtr->result = Do_PluginInit(gFMX_ExternCallPtr->extnVersion);
-		}
-		break;
-			
-		case kFMXT_Idle:
-		{
-			Do_PluginIdle(gFMX_ExternCallPtr->parm1);
-		}
-		break;
-			
-		case kFMXT_Shutdown:
-		{
-			Do_PluginShutdown();
-		}
-		break;
-			
-		case kFMXT_DoAppPreferences:
-		{
-			Do_PluginPrefs();
-		}
-		break;
+    switch (type) {
+        case kFMXT_OptionsStr  : source = plugin_strings[0]; break;
+        case kFMXT_NameStr     : source = plugin_strings[1]; break;
+        case kFMXT_AppConfigStr: source = plugin_strings[2]; break;
+    }
+    for (i = 0; i < limit && source[i] != '\0'; ++i)
+        target[i] = source[i];
+}
 
-		case kFMXT_GetString:
-		{
-			Do_GetString(gFMX_ExternCallPtr->parm1, gFMX_ExternCallPtr->parm2,
-						gFMX_ExternCallPtr->parm3, reinterpret_cast<FMX_Unichar*>(gFMX_ExternCallPtr->result));
-		}
-		break;
 
-	}// switch whichCall
 
-} // FMExternCallProc
+void FMX_ENTRYPT 
+FMExternCallProc(FMX_ExternCallPtr pb)
+{
+    // Setup global defined in FMxExtern.h
+    gFMX_ExternCallPtr = pb;
+
+    // Message dispatcher
+    switch (gFMX_ExternCallPtr->whichCall) {
+        case kFMXT_Init:
+            gFMX_ExternCallPtr->result = Do_PluginInit2(
+                    gFMX_ExternCallPtr->extnVersion);
+            break;
+        case kFMXT_Idle:
+            Do_PluginIdle(gFMX_ExternCallPtr->parm1);
+            break;
+        case kFMXT_Shutdown:
+            Do_PluginShutdown2();
+            break;
+        case kFMXT_DoAppPreferences:
+            Do_PluginPrefs();
+            break;
+        case kFMXT_GetString:
+            Do_GetString2(pb->parm1, pb->parm3, 
+                reinterpret_cast<FMX_Unichar*>(pb->result));
+           break;
+    }
+}
 	
