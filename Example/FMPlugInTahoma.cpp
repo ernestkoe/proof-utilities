@@ -37,17 +37,17 @@ static struct plugin_function_definition {
 #endif  
   *callable)(short, const fmx::ExprEnv&, const fmx::DataVect&, fmx::Data&);
 } plugin_functions[] = {
-  {  110, "PGrp_LDistance( text1; text2 )", 2, 2, DEFAULT_FLAGS,
+  {  104, "PGrp_LDistance( text1; text2 )", 2, 2, DEFAULT_FLAGS,
        &Do_PGrp_LDistance },
-  {  111, "PGrp_SoundexAM( text )"        , 1, 1, DEFAULT_FLAGS,
+  {  105, "PGrp_SoundexAM( text )"        , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_SoundexAmerican },
-  {  112, "PGrp_SoundexDM( text )"        , 1, 1, DEFAULT_FLAGS,
+  {  106, "PGrp_SoundexDM( text )"        , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_SoundexDM },
-  {  109, "PGrp_Version"                  , 0, 0, DEFAULT_FLAGS,
+  {  101, "PGrp_Version"                  , 0, 0, DEFAULT_FLAGS,
        &Do_PGrp_Version },
-  {  114, "PGrp_Redux( text )"            , 1, 1, DEFAULT_FLAGS,
+  {  107, "PGrp_Redux( text )"            , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_Redux },
-  {  113, "PGrp_ExecuteSQL( expression; columnSeparator; rowSeparator )", 
+  {  102, "PGrp_ExecuteSQL( expression; columnSeparator; rowSeparator )", 
                                             3, 3, DEFAULT_FLAGS,
        &Do_PGrp_ExecuteSQL },
   {    0, NULL }
