@@ -45,6 +45,9 @@ static struct plugin_function_definition {
        &Do_PGrp_Version },
   {  114, "PGrp_Redux( text )"            , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_Redux },
+  {  113, "PGrp_ExecuteSQL( expression; columnSeparator; rowSeparator )", 
+                                            3, 3, DEFAULT_FLAGS,
+       &Do_PGrp_ExecuteSQL },
   {    0, NULL }
 };
 
