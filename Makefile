@@ -47,6 +47,10 @@ tahoma_win_32_o = $(addprefix build/win/32/,$(addsuffix .obj,$(tahoma-c)))
 tahoma_win_64_o = $(addprefix build/win/64/,$(addsuffix .obj,$(tahoma-c)))
 tahoma_mac_o    = $(addprefix build/mac/,$(addsuffix .o  ,$(tahoma-c)))
 
+tahoma_mac_b    = build/mac/Tahoma
+tahoma_mac      = $(addprefix build/mac/Tahoma.fmplugin/Contents/, \
+    Info.plist PkgInfo MacOS/Tahoma)
+
 tahoma_mac_32_o = $(addprefix build/mac/32/,$(addsuffix .o  ,$(tahoma-c)))
 tahoma_mac_64_o = $(addprefix build/mac/64/,$(addsuffix .o  ,$(tahoma-c)))
 
@@ -103,10 +107,31 @@ build/win/64/Tahoma.fmx64: $(tahoma_win_64_o) $(tahoma_win_64_res)
 build/mac/%.o: Example/%.cpp
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
-	g++ $(CPPFLAGS) -arch i386 -c \
+	g++ $(CPPFLAGS) -arch i386 -arch x86_64 -c \
         -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4 \
         -o$@ $<
 
+build/mac/Tahoma: $(tahoma_mac_o)
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Linking Mac code]$${z} "
+	g++ -arch i386 -arch x86_64 -bundle -FPluginSDK/Libraries/Mac \
+        -framework FMWrapper -o$@ $^ \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4
+
+build/mac/Tahoma.fmplugin/Contents/PkgInfo: sources/PkgInfo
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying PkgInfo]$${z} "
+	cp $< $@
+
+build/mac/Tahoma.fmplugin/Contents/Info.plist: sources/Info.plist
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying InfoPlist.]$${z} "
+	cp $< $@
+
+build/mac/Tahoma.fmplugin/Contents/MacOS/Tahoma: build/mac/Tahoma
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying the Tahoma bundle binary.]$${z} "
+	cp $< $@
 
 ##############################################################################
 # Windows-specific settings
@@ -149,11 +174,13 @@ endif
 
 .PHONY: tahoma-win-32 tahoma-win-32-o \
         tahoma-win-64 tahoma-win-64-o \
-        tahoma-mac tahoma-mac-o
+        tahoma-mac tahoma-mac-b tahoma-mac-o
 tahoma-win-32: $(tahoma_win_32)
 tahoma-win-32-o: $(tahoma_win_32_o) $(tahoma_win_res)
 tahoma-win-64: $(tahoma_win_64)
 tahoma-win-64-o: $(tahoma_win_64_o) $(tahoma_win_res)
+tahoma-mac:   $(tahoma_mac)
+tahoma-mac-b: $(tahoma_mac_b)
 tahoma-mac-o: $(tahoma_mac_o)
 
 
