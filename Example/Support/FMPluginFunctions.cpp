@@ -109,7 +109,7 @@ FMX_PROC(fmx::errcode) Do_PGrp_Version(short /* funcId */, const fmx::ExprEnv& /
 	fmx::errcode errorResult = 0;
 	
 	fmx::FixPtAutoPtr	num;
-	num->AssignInt( 8 );
+	num->AssignInt( 1 );
 
 	results.SetAsNumber(*num);
 
