@@ -72,11 +72,13 @@ CPPFLAGS += -IExample/Support -IPlugInSDK/Headers
 build/win/32/%.obj build/win/64/%.obj: Example/%.cpp
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
-	cl $(CPPFLAGS) -c -EHsc -Fo$@ $<
+	cl $(CPPFLAGS) -c -EHsc -Fo$@ -O1 $<
 
 # -c    : compile only
 # -EHsc : only catch C++ exceptions and assume that "extern C" functions
 #         never throw one
+# -Fo<FILE> : output file name
+# -O1   : optimize for size
 
 # Pattern rule to build Windows resources
 
@@ -107,7 +109,7 @@ build/win/64/Tahoma.fmx64: $(tahoma_win_64_o) $(tahoma_win_64_res)
 build/mac/%.o: Example/%.cpp
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
-	g++ $(CPPFLAGS) -arch i386 -arch x86_64 -c \
+	g++ $(CPPFLAGS) -arch i386 -arch x86_64 -c -Os \
         -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4 \
         -o$@ $<
 
@@ -172,9 +174,11 @@ ifeq ($(platform),win)
 endif
 
 
-.PHONY: tahoma-win-32 tahoma-win-32-o \
+.PHONY: tahoma-win \
+        tahoma-win-32 tahoma-win-32-o \
         tahoma-win-64 tahoma-win-64-o \
         tahoma-mac tahoma-mac-b tahoma-mac-o
+tahoma-win: tahoma-win-32 tahoma-win-64
 tahoma-win-32: $(tahoma_win_32)
 tahoma-win-32-o: $(tahoma_win_32_o) $(tahoma_win_res)
 tahoma-win-64: $(tahoma_win_64)
