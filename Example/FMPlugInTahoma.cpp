@@ -37,19 +37,22 @@ static struct plugin_function_definition {
 #endif  
   *callable)(short, const fmx::ExprEnv&, const fmx::DataVect&, fmx::Data&);
 } plugin_functions[] = {
-  {  104, "PGrp_LDistance( text1; text2 )", 2, 2, DEFAULT_FLAGS,
+  {    4, "PGrp_LDistance( text1; text2 )", 2, 2, DEFAULT_FLAGS,
        &Do_PGrp_LDistance },
-  {  105, "PGrp_SoundexAM( text )"        , 1, 1, DEFAULT_FLAGS,
+  {    5, "PGrp_SoundexAM( text )"        , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_SoundexAmerican },
-  {  106, "PGrp_SoundexDM( text )"        , 1, 1, DEFAULT_FLAGS,
+  {    6, "PGrp_SoundexDM( text )"        , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_SoundexDM },
-  {  101, "PGrp_Version"                  , 0, 0, DEFAULT_FLAGS,
+  {    1, "PGrp_Version"                  , 0, 0, DEFAULT_FLAGS,
        &Do_PGrp_Version },
-  {  107, "PGrp_Redux( text )"            , 1, 1, DEFAULT_FLAGS,
+  {    7, "PGrp_Redux( text )"            , 1, 1, DEFAULT_FLAGS,
        &Do_PGrp_Redux },
-  {  102, "PGrp_ExecuteSQL( expression; columnSeparator; rowSeparator )", 
-                                            3, 3, DEFAULT_FLAGS,
+  {    2, "PGrp_ExecuteSQL( expression )", 
+                                            1, 1, DEFAULT_FLAGS,
        &Do_PGrp_ExecuteSQL },
+  {    3, "PGrp_ExecuteScript( filename; scriptname {; parameter} )", 
+                                            2, 3, DEFAULT_FLAGS,
+       &Do_PGrp_StartScript },
   {    0, NULL }
 };
 
