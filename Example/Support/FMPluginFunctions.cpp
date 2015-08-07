@@ -104,17 +104,19 @@ void SetVectorToString(const vector<string> &vStr, const string &elementDelim, s
 */
 
 
-FMX_PROC(fmx::errcode) Do_PGrp_Version(short /* funcId */, const fmx::ExprEnv& /* environment */, const fmx::DataVect& /* dataVect */, fmx::Data& results)
+FMX_PROC(fmx::errcode) 
+Do_PGrp_Version(
+         short          /* funcId */, 
+   const fmx::ExprEnv&  /* environment */, 
+   const fmx::DataVect& /* dataVect */, 
+         fmx::Data&        results)
 {
-	fmx::errcode errorResult = 0;
-	
-	fmx::FixPtAutoPtr	num;
-	num->AssignInt( 1 );
+    fmx::FixPtAutoPtr num;
 
-	results.SetAsNumber(*num);
-
-return(errorResult);
-} // Do_PGrp_Version
+    num->AssignInt(1);
+    results.SetAsNumber(*num);
+    return 0;
+}
 
 
 FMX_PROC(fmx::errcode) Do_PGrp_LDistance(short /* funcId */, const fmx::ExprEnv& /* environment */, const fmx::DataVect& dataVect, fmx::Data& results)
@@ -400,26 +402,30 @@ return(errorResult);
 
 
 
-FMX_PROC(fmx::errcode) Do_PGrp_StartScript(short /* funcId */, const fmx::ExprEnv& /* environment */, const fmx::DataVect& dataVect, fmx::Data& /* results */)
+FMX_PROC(fmx::errcode)
+Do_PGrp_StartScript(
+               short   /* funcId */, 
+  const fmx::ExprEnv&  /* environment */, 
+  const fmx::DataVect&    parameters, 
+        fmx::Data&        result)
 {
-	fmx::errcode errorResult = 0;
-	
-	fmx::uint32 nParams = dataVect.Size();
+    fmx::uint32 size;
+    fmx::errcode error;
+    fmx::FixPtAutoPtr efixpt;
 
-	if (nParams > 1)
-	{
-		// This function will trigger the execution of a script in FileMaker Pro.
-		errorResult = FMX_StartScript( &(dataVect.AtAsText(0)), &(dataVect.AtAsText(1)), kFMXT_Pause, &(dataVect.At(2)) );
-	}
-	else
-	{
-		errorResult = -1;	// This is just an example of returning an error
+    if (parameters.Size() == 2) {
+        fmx::DataAutoPtr dummy;
 
-	}// nParams > 1
-
-
-return(errorResult);
-} // Do_PGrp_StartScript
+        error = FMX_StartScript(&(parameters.AtAsText(0)), 
+                &(parameters.AtAsText(1)), kFMXT_Pause, &(*dummy));
+    }
+    else /* 3 */
+        error = FMX_StartScript(&(parameters.AtAsText(0)), 
+                &(parameters.AtAsText(1)), kFMXT_Pause, &(parameters.At(2)));
+    efixpt->AssignInt(error);
+    result.SetAsNumber(*efixpt);
+    return 0;
+}
 
 
 

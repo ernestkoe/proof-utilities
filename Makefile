@@ -1,3 +1,7 @@
+# Settings
+
+FM_SDK_VERSION = 13
+
 # Compile the plug-in in 32- and 64-bit mode
 
 
@@ -56,8 +60,8 @@ tahoma_mac_64_o = $(addprefix build/mac/64/,$(addsuffix .o  ,$(tahoma-c)))
 
 $(info $(tahoma_mac_o))
 
-tahoma_win_32_res = build/win/32/FMPluginExample.res
-tahoma_win_64_res = build/win/64/FMPluginExample.res
+tahoma_win_32_res = build/win/32/resources.res
+tahoma_win_64_res = build/win/64/resources.res
 tahoma_win_res = build/win/FMPluginExample.res
 
 tahoma_win_32 = build/win/32/Tahoma.fmx
@@ -65,7 +69,8 @@ tahoma_win_64 = build/win/64/Tahoma.fmx64
 
 # Standard CPP compilation flags
 
-CPPFLAGS += -IExample/Support -IPlugInSDK/Headers
+CPPFLAGS += -IExample/Support -IPlugInSDK/Headers \
+    -IPluginSDK/v$(FM_SDK_VERSION)/Headers/FMWrapper
 
 # Pattern rule to build 32-bit Windows objects
 
@@ -86,6 +91,12 @@ build/win/32/%.res build/win/64/%.res: Example/Support/%.rc
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Compiling Windows resources]$${z} "
 	rc -nologo -IExample -Fo$@ $<
+
+build/win/32/%.res build/win/64/%.res: code/%.rc
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling Windows resources]$${z} "
+	rc -nologo -IExample -IPluginSDK/v$(FM_SDK_VERSION)/Headers/FMWrapper -Fo$@ $<
+    
 
 # Rule to build the Win32 version
 
