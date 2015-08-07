@@ -138,9 +138,9 @@ static const char* plugin_strings[] = {
        "Y"   /* fixed value */
        "n"   /* no idle time */
        "nn", /* fixed value */
-    "Tahoma",
-    "Tahoma String Utilities plug-in. This plug-in was derived from the "
-        "FMExample plug-in."
+    "Proof Utilities",
+    "The Proof Utilities plug-in adds a number of utility functions to "
+            "FileMaker Pro."
 };
 
 static void
