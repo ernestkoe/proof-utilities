@@ -3,25 +3,25 @@
     "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>Tahoma</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Tahoma version 1.0, Copyright 2007-2015 by Proof Group, LLC.  All rights reserved.</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.proofgroup.tahoma</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Tahoma</string>
-	<key>CFBundlePackageType</key>
-	<string>FMXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string>Tahoma version 1.0</string>
-	<key>CFBundleSignature</key>
-	<string>PGrp</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>English</string>
+    <key>CFBundleExecutable</key>
+    <string>ProofUtilities</string>
+    <key>CFBundleGetInfoString</key>
+    <string>Proof Utilities version 1.0, Copyright © 2007-2015 Proof Group, LLC. All rights reserved.</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.proofgroup.proof-utilities</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>ProofUtilities</string>
+    <key>CFBundlePackageType</key>
+    <string>FMXT</string>
+    <key>CFBundleShortVersionString</key>
+    <string>Proof Utilities version 1.0</string>
+    <key>CFBundleSignature</key>
+    <string>PGrp</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
 </dict>
 </plist>
