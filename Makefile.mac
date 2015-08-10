@@ -51,7 +51,7 @@ build/mac/%.o: code/%.cpp
 build/mac/$(PLUGIN_FILE_NAME): build/mac/plugin.o build/mac/functions.o
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Linking Mac code]$${z} "
-	g++ -arch i386 -arch x86_64 -bundle -FPluginSDK/Libraries/Mac \
+	g++ -arch i386 -arch x86_64 -bundle -FPluginSDK/v$(FM_SDK_VERSION)/Libraries/Mac \
         -framework FMWrapper -o$@ $^ \
         -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4
 
