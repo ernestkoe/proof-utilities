@@ -1,0 +1,132 @@
+##############################################################################
+# Windows-specific Makefile
+# Must be included into the main Makefile.
+
+##############################################################################
+# The final target
+
+proof-utilities: build/$(PLUGIN_FILE_NAME).fmx build/$(PLUGIN_FILE_NAME).fmx64
+
+##############################################################################
+# Rules to create the final target (just copy from build).
+
+build/$(PLUGIN_FILE_NAME).fmx: build/win/32/$(PLUGIN_FILE_NAME).fmx
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying $(PLUGIN_FILE_NAME).fmx]$${z} "
+	cp $< $@
+
+build/$(PLUGIN_FILE_NAME).fmx64: build/win/64/$(PLUGIN_FILE_NAME).fmx64
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying $(PLUGIN_FILE_NAME).fmx64]$${z} "
+	cp $< $@
+
+##############################################################################
+# Rules to compile C++ files.
+
+build/win/%.obj: CPPFLAGS += -c -EHsc -MT -nologo -O1
+
+# -c   compile only
+# -EHsc   only catch C++ exceptions and assume that "extern C" functions
+#     never throw one
+# -MT   link the C runtime statically
+# -nologo   suppress the logo banner.
+# -O1   optimize for size
+
+build/win/32/%.obj: code/%.cpp
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling 32-bit C++]$${z} "
+	cl $(CPPFLAGS) -Fo$@ $<
+
+build/win/64/%.obj: code/%.cpp
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling 64-bit C++]$${z} "
+	cl $(CPPFLAGS) -Fo$@ $<
+
+# -Fo<FILE>   output file name
+
+##############################################################################
+# Rules to compile Windows resources
+
+build/win/32/%.res: code/%.rc
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling Windows resources]$${z} "
+	rc -nologo $(CPPFLAGS) -Fo$@ $<
+
+build/win/64/%.res: code/%.rc
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling Windows resources]$${z} "
+	rc -nologo $(CPPFLAGS) -Fo$@ $<
+
+# -nologo: suppress the compiler logo banner.
+# -Fo<PATH>: output file name.
+
+##############################################################################
+# Rules to link object files into the final binary.
+
+build/win/32/$(PLUGIN_FILE_NAME).fmx \
+build/win/64/$(PLUGIN_FILE_NAME).fmx64: LFLAGS += \
+	-nologo -dll -manifest:no advapi32.lib user32.lib
+
+build/win/32/$(PLUGIN_FILE_NAME).fmx  : LFLAGS += -machine:x86 \
+	PlugInSDK/v$(FM_SDK_VERSION)/Libraries/Win/win32/FMWrapper.lib
+
+build/win/64/$(PLUGIN_FILE_NAME).fmx64: LFLAGS += -machine:x64 \
+	PlugInSDK/v$(FM_SDK_VERSION)/Libraries/Win/x64/FMWrapper.lib
+
+# nologo: suppress the linker logo banner.
+# dll: produce a DLL
+# manifest:<yn>: whether to add a manifest
+# *.lib: libraries to link against
+# out:<FILE>: output file name
+
+build/win/32/$(PLUGIN_FILE_NAME).fmx  : LFLAGS += -machine:x86
+build/win/32/$(PLUGIN_FILE_NAME).fmx64: LFLAGS += -machine:x64
+
+build/win/32/$(PLUGIN_FILE_NAME).fmx: build/win/32/plugin.obj \
+    build/win/32/functions.obj build/win/32/plugin.res
+	@$(MAKE-PARENT-DIRECTORY?)
+	$(MESSAGE) "$${g}[Linking Windows 32-bit version]$${z} "
+	link $(LFLAGS) -out:$@ $^
+
+build/win/64/$(PLUGIN_FILE_NAME).fmx64: build/win/64/plugin.obj \
+    build/win/64/functions.obj build/win/64/plugin.res
+	@$(MAKE-PARENT-DIRECTORY?)
+	$(MESSAGE) "$${g}[Linking Windows 64-bit version]$${z} "
+	link $(LFLAGS) -out:$@ $^
+
+##############################################################################
+# Windows-specific settings
+
+# Common environment variables.
+
+WIN-MVS = C:\Program Files (x86)\Microsoft Visual Studio 10.0
+WIN-SDK = C:\Program Files\Microsoft SDKs\Windows\v7.1
+
+# The INCLUDE variable is same for both 32- and 64-bit builds.
+
+build/win/32/% build/win/64/%: \
+  export INCLUDE = $(WIN-MVS)\VC\include;$(WIN-SDK)\Include;
+
+# The APPVER (minimal target OS) is also same and I set it to Windows XP
+
+build/win/32/% build/win/64/%:
+  export APPVER = 5.01
+
+# The LIB variable differs
+
+build/win/32/%: \
+  export LIB := $(WIN-MVS)\VC\lib;$(WIN-SDK)\Lib;
+build/win/64/%: \
+  export LIB := $(WIN-MVS)\VC\lib\amd64;$(WIN-SDK)\Lib\x64;
+
+# Finally I need to alter the PATH to point to right directories:
+
+WIN-PATH-COMMON = \
+  $(shell cygpath "$(WIN-MVS)\Common7\IDE"):$(shell cygpath "$(WIN-MVS)\VC\vcpackages")
+
+build/win/32/%: export PATH := \
+  $(shell cygpath "$(WIN-MVS)\VC\bin"):$(shell cygpath "$(WIN-SDK)\Bin"):$(WIN-PATH-COMMON):$(PATH)
+
+build/win/64/%: export PATH := \
+  $(shell cygpath "$(WIN-MVS)\VC\bin\amd64"):$(shell cygpath "$(WIN-SDK)\Bin\x64"):$(WIN-PATH-COMMON):$(PATH)
+
