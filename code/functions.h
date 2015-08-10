@@ -20,7 +20,7 @@
 #include "FMWrapper/FMXText.h"
 
 
-#include "FMPluginGlobalDefines.h"
+#include "plugin.h"
 
 #pragma once
 

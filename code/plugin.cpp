@@ -6,7 +6,7 @@
 
 
 
-#include "Support/FMPluginGlobalDefines.h"
+#include "plugin.h"
 
 #if defined(FMX_WIN_TARGET)
 	#include "Windows.h"
@@ -19,7 +19,7 @@
 #include "FMWrapper/FMXData.h"
 #include "FMWrapper/FMXCalcEngine.h"
 
-#include "Support/FMPluginFunctions.h"
+#include "functions.h"
 
 /****************************************************************************
  * Functions                                                                *
