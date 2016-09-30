@@ -9,13 +9,15 @@
 #include "plugin.h"
 
 #if defined(FMX_WIN_TARGET)
-	#include "Windows.h"
-	#include <locale.h>
+#  include "Windows.h"
+#  include <locale.h>
 #endif
 
 #if defined(FMX_MAC_TARGET)
-	#include <CoreServices/CoreServices.h>
-	#include <Carbon/Carbon.h>
+/*
+#  include <CoreServices/CoreServices.h>
+#  include <Carbon/Carbon.h>
+*/
 #endif 
 
 #include "FMWrapper/FMXExtern.h"
@@ -111,7 +113,7 @@ Do_PGrp_Version(
 {
     fmx::FixPtAutoPtr num;
 
-    num->AssignInt(1);
+    num->AssignDouble(1.1);
     results.SetAsNumber(*num);
     return 0;
 }

@@ -152,6 +152,7 @@ Do_GetString2(fmx::uchar type, fmx::ptrtype limit, fmx::unichar *target)
         case kFMXT_OptionsStr  : source = plugin_strings[0]; break;
         case kFMXT_NameStr     : source = plugin_strings[1]; break;
         case kFMXT_AppConfigStr: source = plugin_strings[2]; break;
+        default: return;
     }
     for (i = 0; i < limit && source[i] != '\0'; ++i)
         target[i] = source[i];

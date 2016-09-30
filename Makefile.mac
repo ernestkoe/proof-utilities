@@ -35,8 +35,8 @@ build/$(PLUGIN_FILE_NAME).fmplugin/Contents/MacOS/$(PLUGIN_FILE_NAME): \
 build/mac/%.o: code/%.cpp
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
-	g++ $(CPPFLAGS) -arch i386 -arch x86_64 -c \
-        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4 \
+	clang $(CPPFLAGS) -arch i386 -arch x86_64 -c \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -mmacosx-version-min=10.4 \
         -o$@ $<
 
 # -arch <CODE>   compile for the specified architecture.
@@ -51,9 +51,10 @@ build/mac/%.o: code/%.cpp
 build/mac/$(PLUGIN_FILE_NAME): build/mac/plugin.o build/mac/functions.o
 	@$(MAKE-PARENT-DIRECTORY?)
 	@$(MESSAGE) "$${g}[Linking Mac code]$${z} "
-	g++ -arch i386 -arch x86_64 -bundle -FPluginSDK/v$(FM_SDK_VERSION)/Libraries/Mac \
+	clang -arch i386 -arch x86_64 -bundle -FPluginSDK/v$(FM_SDK_VERSION)/Libraries/Mac \
         -framework FMWrapper -o$@ $^ \
-        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.4
+        -lstdc++ \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -mmacosx-version-min=10.4 
 
 # arch   target architectures
 # bundle   produce a loadable bundle

@@ -8,7 +8,7 @@
     <key>CFBundleExecutable</key>
     <string>ProofUtilities</string>
     <key>CFBundleGetInfoString</key>
-    <string>Proof Utilities version 1.0, Copyright © 2007-2015 Proof Group, LLC. All rights reserved.</string>
+    <string>Proof Utilities version 1.1, Copyright © 2007-2016 Proof Group, LLC. All rights reserved.</string>
     <key>CFBundleIdentifier</key>
     <string>com.proofgroup.proof-utilities</string>
     <key>CFBundleInfoDictionaryVersion</key>
@@ -18,10 +18,10 @@
     <key>CFBundlePackageType</key>
     <string>FMXT</string>
     <key>CFBundleShortVersionString</key>
-    <string>Proof Utilities version 1.0</string>
+    <string>Proof Utilities version 1.1</string>
     <key>CFBundleSignature</key>
     <string>PGrp</string>
     <key>CFBundleVersion</key>
-    <string>1.0</string>
+    <string>1.1</string>
 </dict>
 </plist>

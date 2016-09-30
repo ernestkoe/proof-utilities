@@ -43,8 +43,8 @@ END
 #endif
 
 1 VERSIONINFO
-FILEVERSION     1,0,0,0
-PRODUCTVERSION  1,0,0,0
+FILEVERSION     1,1,0,0
+PRODUCTVERSION  1,1,0,0
 FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
 FILEFLAGS       0
 FILEOS          VOS__WINDOWS32
@@ -56,12 +56,12 @@ BEGIN
         BLOCK "040904E4" /* US English, Windows 1252 */
         BEGIN
             VALUE "CompanyName"     , "Proof Group, LLC\0"
-            VALUE "LegalCopyright"  , "Copyright © 2007-2015 Proof Group, LLC\0"
+            VALUE "LegalCopyright"  , "Copyright © 2007-2016 Proof Group, LLC\0"
             VALUE "ProductName"     , "ProofUtilities\0"
-            VALUE "ProductVersion"  , "1.0\0"
+            VALUE "ProductVersion"  , "1.1\0"
             VALUE "InternalName"    , "ProofUtilities\0"
             VALUE "OriginalFilename", "ProofUtilities" FILENAME_EXT "\0"
-            VALUE "FileVersion"     , "1.0\0"
+            VALUE "FileVersion"     , "1.1\0"
             VALUE "FileDescription" , "Proof Unitilies FileMaker plug-in\0"
         END
     END
