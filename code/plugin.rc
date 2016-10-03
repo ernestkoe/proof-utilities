@@ -1,0 +1,73 @@
+#pragma code_page(65001)
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE  
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE  
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE  
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#if defined(_MSC_VER) && defined(_M_X64) || defined(__GNUC__) && defined(_LP64)
+#  define FILENAME_EXT ".fmx64"
+#else
+#  define FILENAME_EXT ".fmx"
+#endif
+
+1 VERSIONINFO
+FILEVERSION     1,1,0,0
+PRODUCTVERSION  1,1,0,0
+FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+FILEFLAGS       0
+FILEOS          VOS__WINDOWS32
+FILETYPE        VFT_DLL
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4" /* US English, Windows 1252 */
+        BEGIN
+            VALUE "CompanyName"     , "Proof Group, LLC\0"
+            VALUE "LegalCopyright"  , "Copyright © 2007-2016 Proof Group, LLC\0"
+            VALUE "ProductName"     , "ProofUtilities\0"
+            VALUE "ProductVersion"  , "1.1\0"
+            VALUE "InternalName"    , "ProofUtilities\0"
+            VALUE "OriginalFilename", "ProofUtilities" FILENAME_EXT "\0"
+            VALUE "FileVersion"     , "1.1\0"
+            VALUE "FileDescription" , "Proof Unitilies FileMaker plug-in\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+        BEGIN
+            VALUE "Translation", 0x409, 1252
+        END
+    END
+END

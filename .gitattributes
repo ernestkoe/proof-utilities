@@ -1,0 +1,2 @@
+PluginSDK/*/Libraries/Win/*/FMWrapper.lib -crlf -diff -merge
+PluginSDK/*/Libraries/Mac/*/FMWrapper.framework/Versions/A/FMWrapper -crlf -diff -merge

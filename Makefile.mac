@@ -1,0 +1,66 @@
+##############################################################################
+# Mac-specific Makefile
+# Must be included into the main Makefile.
+
+##############################################################################
+# The final target
+
+proof-utilities: \
+    build/$(PLUGIN_FILE_NAME).fmplugin/Contents/Info.plist                   \
+    build/$(PLUGIN_FILE_NAME).fmplugin/Contents/PkgInfo                      \
+    build/$(PLUGIN_FILE_NAME).fmplugin/Contents/MacOS/$(PLUGIN_FILE_NAME)
+
+##############################################################################
+# Rules to create the final target (just copy stuff from sources and build).
+
+build/$(PLUGIN_FILE_NAME).fmplugin/Contents/Info.plist: code/Info.plist
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying InfoPlist.]$${z} "
+	cp $< $@
+
+build/$(PLUGIN_FILE_NAME).fmplugin/Contents/PkgInfo: code/PkgInfo
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying PkgInfo.]$${z} "
+	cp $< $@
+
+build/$(PLUGIN_FILE_NAME).fmplugin/Contents/MacOS/$(PLUGIN_FILE_NAME): \
+    build/mac/$(PLUGIN_FILE_NAME)
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Copying $(PLUGIN_FILE_NAME) binary.]$${z} "
+	cp $< $@
+
+##############################################################################
+# Rules to compile C++ files.
+
+build/mac/%.o: code/%.cpp
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Compiling C++]$${z} "
+	clang $(CPPFLAGS) -arch i386 -arch x86_64 -c \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -mmacosx-version-min=10.4 \
+        -o$@ $<
+
+# -arch <CODE>   compile for the specified architecture.
+# -c   compile only, do not link.
+# -isysroot <DIRECTORY>   the root for include directives
+# -mmacos-version-min=<VERSION>   target Mac OS X version
+# -o<PATH>   output file name
+
+##############################################################################
+# Rules to link object files into the final binary.
+
+build/mac/$(PLUGIN_FILE_NAME): build/mac/plugin.o build/mac/functions.o
+	@$(MAKE-PARENT-DIRECTORY?)
+	@$(MESSAGE) "$${g}[Linking Mac code]$${z} "
+	clang -arch i386 -arch x86_64 -bundle -FPluginSDK/v$(FM_SDK_VERSION)/Libraries/Mac \
+        -framework FMWrapper -o$@ $^ \
+        -lstdc++ \
+        -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -mmacosx-version-min=10.4 
+
+# arch   target architectures
+# bundle   produce a loadable bundle
+# -F<PATH>   directory to search for frameworks
+# -framework <NAME>   link against the specified framework
+# -o<PATH>   output file name.
+# -isysroot <DIRECTORY>   the root for include directives
+# -mmacos-version-min=<VERSION>   target Mac OS X version
+
