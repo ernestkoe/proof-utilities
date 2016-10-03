@@ -111,11 +111,11 @@ Do_PGrp_Version(
    const fmx::DataVect& /* dataVect */, 
          fmx::Data&        results)
 {
-    fmx::FixPtAutoPtr num;
+    fmx::TextAutoPtr result;
 
-    num->AssignDouble(1.1);
-    results.SetAsNumber(*num);
-    return 0;
+    result->Assign("1.1", fmx::Text::kEncoding_UTF8);
+    results.SetAsText(*result, results.GetLocale());
+    return 0; /* NO ERROR */
 }
 
 
